@@ -1,0 +1,337 @@
+@namespace iesaver
+@using iesaver.Models
+
+@code {
+	[Parameter]
+	public CreatureModel Model { get; set; }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Adventure</title>
+	<style>
+		@@import url('https://fonts.googleapis.com/css?family=Pirata+One|Assistant|Hurricane&display=swap');
+
+		:root {
+			--fontSize: 1rem;
+		}
+
+		*, *:before, *:after {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		html, body {
+			height: 100%;
+		}
+
+		body {
+			background-color: #000;
+			font: var(--fontSize)/200% 'Assistant', cursive;
+			background-image: url(images/stone.webp);
+			background-size: cover;
+		}
+
+		main p, main ul, h1, h2, div, span {
+			font-size: 1.25em;
+			color: #7F3300;
+			margin-top: .75em;
+			z-index: 1;
+		}
+
+		.container::before {
+			content: " ";
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			box-sizing: border-box;
+			background-image: url(data:image/png;base64,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);
+			margin: 2rem 0;
+			box-shadow: 2px 3px 20px black, 0 0 125px #8f5922 inset;
+			background: #fffef0;
+			background-size: contain;
+			background-repeat: no-repeat;
+			filter: blur(2px);
+			z-index: 0;
+			filter: url(#wavy2);
+		}
+
+		.container {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 75%;
+			margin: 0 auto;
+			padding: 4em;
+			max-width: 1200px;
+			margin-bottom: 5rem;
+		}
+	</style>
+</head>
+
+<body>
+	<main>
+		<section class="container">
+			<h1>@Model.Name</h1>
+		</section>
+
+		<section class="container">
+
+			<span>@Model.CreFile.LargePortrait.ToString()</span>
+
+			<h2>Stats</h2>
+			<span>@Model.GetIdsEntry("class.ids", Model.CreFile.Class)</span>
+			<br />
+			<span>@Model.GetIdsEntry("race.ids", Model.CreFile.Race)</span>
+			<br />
+			<span>Level: @Model.CreFile.Level1 / @Model.CreFile.Level2 / @Model.CreFile.Level3</span>
+			<br />
+			<span>HP: @Model.CreFile.CurrentHP / @Model.CreFile.MaximumHP</span>
+			<br />
+			<span>Strength: @Model.CreFile.Strength</span>
+			<br />
+			<span>Dexterity: @Model.CreFile.Dexterity</span>
+			<br />
+			<span>Constitution: @Model.CreFile.Constitution</span>
+			<br />
+			<span>Intelligence: @Model.CreFile.Intelligence</span>
+			<br />
+			<span>Wisdom: @Model.CreFile.Wisdom</span>
+			<br />
+			<span>Charisma: @Model.CreFile.Charisma</span>
+			<br />
+			<span>Fire Resistance: @Model.CreFile.FireResistance</span>
+			<br />
+			<span>Magic Fire Resistance: @Model.CreFile.MagicFireResistance</span>
+			<br />
+			<span>Electricity Resistance: @Model.CreFile.AcidResistance</span>
+			<br />
+			<span>Electricity Resistance: @Model.CreFile.ElectricityResistance</span>
+			<br />
+			<span>Cold Resistance: @Model.CreFile.ColdResistance</span>
+			<br />
+			<span>Magic Cold Resistance: @Model.CreFile.MagicColdResistance</span>
+			<br />
+			<span>Magic Resistance: @Model.CreFile.MagicResistance</span>
+			<br />
+			<span>Magic Resistance: @Model.CreFile.SlashingResistance</span>
+			<br />
+			<span>Magic Resistance: @Model.CreFile.CrushingResistance</span>
+			<br />
+			<span>Magic Resistance: @Model.CreFile.PiercingResistance</span>
+			<br />
+			<span>Magic Resistance: @Model.CreFile.MissileResistance</span>
+		</section>
+
+		<section class="container">
+			<h2>Equipment</h2>
+			@if (Model.CreFile.Items.Helmet != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Helmet.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Armor != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Armor.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Shield != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Shield.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Gloves != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Gloves.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.RingLeft != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.RingLeft.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.RingRight != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.RingRight.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Amulet != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Amulet.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Belt != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Belt.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Boots != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Boots.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Weapon1 != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Weapon1.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Weapon2 != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Weapon2.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Weapon3 != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Weapon3.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Weapon4 != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Weapon4.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Quiver1 != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Quiver1.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Quiver2 != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Quiver2.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Quiver3 != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Quiver3.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Quiver4 != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Quiver4.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			@if (Model.CreFile.Items.Cloak != null)
+			{
+				var item = Model.Items.FirstOrDefault(i => string.Equals(i.Filename, Model.CreFile.Items.Cloak.Filename.ToString() + ".itm", StringComparison.OrdinalIgnoreCase));
+				if (item != null)
+				{
+					<span>@item.IdentifiedName.Text</span>
+				}
+			}
+
+			<span>@Model.CreFile.Items.QuickItem1?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.QuickItem2?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.QuickItem3?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem1?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem2?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem3?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem4?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem5?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem6?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem7?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem8?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem9?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem10?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem11?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem12?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem13?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem14?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem15?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.InventoryItem16?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.MagicWeapon?.Filename.ToString()</span>
+			<span>@Model.CreFile.Items.SelectedWeapon</span>
+		</section>
+
+		<section class="container">
+			<h2>Known Spells</h2>
+			@foreach (var spell in Model.CreFile?.KnownSpells?.MageLevel1)
+			{
+				<span>@spell?.Filename.ToString()</span>
+			}
+		</section>
+	</main>
+
+	<svg style="display: none;">
+		<filter id="wavy2">
+			<feTurbulence x="0" y="0" baseFrequency="0.02" numOctaves="5" seed="1" />
+			<feDisplacementMap in="SourceGraphic" scale="20" />
+		</filter>
+	</svg>
+
+</body>
+</html>
